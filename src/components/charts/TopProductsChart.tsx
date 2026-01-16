@@ -37,17 +37,27 @@ export default function TopProductsChart({ data }: TopProductsChartProps) {
               width={120}
               tickLine={false}
             />
+
             <Tooltip
-              formatter={(value: number, name: string) => [
-                name === "revenue" ? `$${value.toFixed(2)}` : value,
-                name === "revenue" ? "Revenue" : "Units Sold",
-              ]}
+              formatter={(
+                value: number | undefined,
+                name: string | undefined
+              ) => {
+                const safeValue = value ?? 0;
+                const safeName = name ?? ""; // default if undefined
+
+                if (safeName === "revenue") {
+                  return [`$${safeValue.toFixed(2)}`, "Revenue"];
+                }
+                return [safeValue, "Units Sold"];
+              }}
               contentStyle={{
                 backgroundColor: "#fff",
                 border: "1px solid #e5e7eb",
                 borderRadius: "8px",
               }}
             />
+
             <Bar dataKey="sales" fill="#3b82f6" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
